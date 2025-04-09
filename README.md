@@ -1,6 +1,8 @@
 # 🎮 Ressel-Clicker
 
-[![Letzte Version](https://img.shields.io/badge/Version-0.2.2-blueviolet)](tutorial.html#changelog) Ein humorvoller Clicker-Klon im Stil von Cookie Clicker, bei dem du Ressel-Coins (RSL) schürfen musst, bis die Maustasten glühen! Stelle Mitarbeiter ein, kaufe Upgrades und optimiere deine Mining-Strategie, um die RSL-Produktion zu maximieren.
+[![Letzte Version](https://img.shields.io/badge/Version-0.2.2-blueviolet)](tutorial.html#changelog) 
+
+Ein humorvoller Clicker-Klon im Stil von Cookie Clicker, bei dem du Ressel-Coins (RSL) schürfen musst, bis die Maustasten glühen! Stelle Mitarbeiter ein, kaufe Upgrades und optimiere deine Mining-Strategie, um die RSL-Produktion zu maximieren.
 
 **➡️ [🎮 Online Spielen](https://fizzyy89.github.io/Resselclicker/) ⬅️**
 
@@ -50,10 +52,6 @@
 * **Lokal:**
     1.  Klone dieses Repository: `git clone https://github.com/fizzyy89/Resselclicker.git` (Ersetze `fizzyy89` ggf. durch den korrekten Benutzernamen, falls dies ein Fork ist)
     2.  Öffne die `index.html`-Datei in deinem bevorzugten Webbrowser.
-
-## 📜 Lizenz
-
-Bitte füge eine `LICENSE`-Datei zu deinem Projekt hinzu! Eine gängige Wahl für Open-Source-Projekte ist die [MIT-Lizenz](https://opensource.org/licenses/MIT).
 
 ---
 
