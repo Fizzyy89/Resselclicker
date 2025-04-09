@@ -510,7 +510,7 @@ function renderBuildings() {
                     
                     return `
                         <button id="building-${building.id}" 
-                                class="crypto-card flex flex-col p-3 transition-all duration-200 relative group
+                                class="crypto-card flex flex-col p-3 pb-14 transition-all duration-200 relative group
                                        ${!canAfford ? 'opacity-50 border border-red-500/30' : 'hover:scale-102 hover:shadow-lg hover:shadow-emerald-500/20'}"
                                 ${!canAfford ? 'disabled' : ''}>
                             <div class="flex items-center gap-2 mb-2">
@@ -526,7 +526,7 @@ function renderBuildings() {
                                 </div>
                                 ${productionInfo}
                             </div>
-                            <div class="mt-2 flex justify-end">
+                            <div class="absolute bottom-3 right-3">
                                 <div class="inline-flex items-center gap-1 px-2 py-1 rounded-full ${!canAfford ? 'bg-red-500/10 text-red-400' : 'bg-emerald-400/10 text-emerald-400'} text-xs font-medium">
                                     <i class="fas fa-coins text-xs"></i>
                                     ${formatNumber(cost)} RSL
@@ -1618,7 +1618,7 @@ function createUpgradeElement(upgrade) {
                         <span class="font-bold ${!isPurchased && !isLocked && !canAfford ? 'text-red-400' : 'text-purple-400'} truncate">${upgrade.name}</span>
                         ${isPurchased ? 
                             '<div class="text-xs text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded-full font-medium">Gekauft</div>' : 
-                            `<div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full ${!canAfford ? 'bg-red-500/10 text-red-400' : 'bg-purple-400/10 text-purple-400'} text-xs font-medium whitespace-nowrap">
+                            `<div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full ${!canAfford ? 'bg-red-500/10 text-red-400' : 'bg-amber-400/10 text-amber-400'} text-xs font-medium whitespace-nowrap">
                                 <i class="fas fa-coins text-xs"></i>
                                 ${formatNumber(upgrade.cost)} RSL
                             </div>`
