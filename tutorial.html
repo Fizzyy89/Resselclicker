@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ressel-Clicker Anleitung</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Google Font Import */
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+        * {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        body {
+            /* Background with slight transparency and blur */
+            background: rgba(17, 25, 40, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px); /* Safari support */
+        }
+
+        .tutorial-card {
+            /* Card background with transparency, blur, rounded corners, and border */
+            background: rgba(17, 25, 40, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px); /* Safari support */
+            border-radius: 1rem; /* Rounded corners */
+            border: 1px solid rgba(255, 255, 255, 0.125); /* Subtle border */
+        }
+
+        .tutorial-section {
+            /* Section styling with a left border */
+            border-left: 3px solid rgba(45, 212, 191, 0.5); /* Teal border */
+            margin-left: 1rem;
+            padding-left: 1rem;
+        }
+
+        .close-button {
+            /* Smooth transition for the close button */
+            transition: all 0.2s ease;
+        }
+
+        .close-button:hover {
+            /* Rotate effect on hover */
+            transform: rotate(90deg);
+        }
+
+        /* Styles for the accordion content transition */
+        .changelog-content {
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out, visibility 0s linear 0.3s; /* Added visibility transition */
+            overflow: hidden;
+            max-height: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            visibility: hidden; /* Start hidden */
+            background-color: rgba(30, 41, 59, 0.3); /* Slightly different background for content */
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+        }
+
+        /* Style for when the accordion content is open */
+        .changelog-content.open {
+             /* Adjust max-height based on expected content size */
+            max-height: 500px; /* Or a larger value if needed */
+            padding-top: 1rem;    /* Equivalent to py-4 top */
+            padding-bottom: 1rem; /* Equivalent to py-4 bottom */
+            padding-left: 1.5rem;  /* Equivalent to px-6 left */
+            padding-right: 1.5rem; /* Equivalent to px-6 right */
+            visibility: visible; /* Make visible when open */
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out, visibility 0s; /* Adjust transition */
+        }
+
+         /* Ensure icon rotates smoothly */
+        .changelog-item .toggle-button i { /* Target icon within the button */
+            transition: transform 0.3s ease;
+        }
+
+    </style>
+    </head>
+<body class="min-h-screen text-gray-200 p-4 md:p-8">
+    <div class="max-w-4xl mx-auto">
+        <div class="tutorial-card p-6 md:p-8">
+            <div class="flex justify-between items-center mb-8">
+                <h1 class="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-400">
+                    <i class="fas fa-book-open mr-3"></i>Ressel-Clicker Anleitung
+                </h1>
+                <button id="close-tutorial" class="close-button text-gray-400 hover:text-emerald-400">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+
+            <div class="mb-8">
+                 <p class="text-lg text-gray-300 leading-relaxed">
+                    Willkommen im Ressel-Clicker! Deine Aufgabe ist es, durch geschicktes Klicken und kluges Management
+                    möglichst viele Ressel-Coins (RSL) zu schürfen. Hier findest du alles, was du für einen erfolgreichen Start brauchst.
+                </p>
+            </div>
+
+            <div class="space-y-8">
+               <div class="tutorial-section">
+                    <h2 class="text-2xl font-bold text-emerald-400 mb-4">
+                        <i class="fas fa-hand-pointer mr-2"></i>Grundlegende Mechaniken
+                    </h2>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start gap-2">
+                            <i class="fas fa-circle-check text-emerald-400 mt-1"></i>
+                            <span>Klicke auf das Ressel-Bild in der Mitte, um RSL zu generieren. Je mehr Upgrades du kaufst, desto mehr RSL erhältst du pro Klick.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fas fa-circle-check text-emerald-400 mt-1"></i>
+                            <span>Du kannst auch die Leertaste verwenden, um zu klicken - praktisch für längere Mining-Sessions!</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fas fa-circle-check text-emerald-400 mt-1"></i>
+                            <span>Dein Fortschritt wird automatisch gespeichert.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="tutorial-section">
+                    <h2 class="text-2xl font-bold text-emerald-400 mb-4">
+                        <i class="fas fa-users mr-2"></i>Mitarbeiter & Gebäude
+                    </h2>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start gap-2">
+                            <i class="fas fa-circle-check text-emerald-400 mt-1"></i>
+                            <span>GPUs generieren automatische Klicks in regelmäßigen Abständen.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fas fa-circle-check text-emerald-400 mt-1"></i>
+                            <span>SG-Admins, Mining-Experten und Rechenzentrumsleiter produzieren automatisch RSL pro Sekunde.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fas fa-circle-check text-emerald-400 mt-1"></i>
+                            <span>Die Kosten für Mitarbeiter steigen mit jedem Kauf - plane deine Investitionen sorgfältig!</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="tutorial-section">
+                    <h2 class="text-2xl font-bold text-emerald-400 mb-4">
+                        <i class="fas fa-arrow-up mr-2"></i>Upgrades
+                    </h2>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start gap-2">
+                            <i class="fas fa-circle-check text-emerald-400 mt-1"></i>
+                            <span>Rang-Upgrades erhöhen die RSL, die du pro Klick erhältst.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fas fa-circle-check text-emerald-400 mt-1"></i>
+                            <span>Effizienz-Upgrades verbessern die Leistung deiner Mitarbeiter und Gebäude.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fas fa-circle-check text-emerald-400 mt-1"></i>
+                            <span>GPU-Upgrades können Synergieeffekte mit anderen Mitarbeitern erzeugen!</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="tutorial-section">
+                    <h2 class="text-2xl font-bold text-emerald-400 mb-4">
+                        <i class="fas fa-lightbulb mr-2"></i>Tipps & Tricks
+                    </h2>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start gap-2">
+                            <i class="fas fa-star text-emerald-400 mt-1"></i>
+                            <span>Halte Ausschau nach der Peitsche - sie hat manchmal hilfreiche (oder weniger hilfreiche) Kommentare für dich!</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fas fa-star text-emerald-400 mt-1"></i>
+                            <span>Hover über Mitarbeiter und Upgrades, um detaillierte Informationen zu erhalten.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fas fa-star text-emerald-400 mt-1"></i>
+                            <span>Es gibt versteckte Cheat-Codes... aber die musst du selbst finden!</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-12">
+                <div class="flex items-center gap-3 mb-6">
+                    <h2 class="text-2xl font-bold text-purple-400">
+                        <i class="fas fa-code-commit mr-2"></i>Changelog
+                    </h2>
+                    <div class="h-px flex-grow bg-gradient-to-r from-purple-400/50 to-transparent"></div>
+                </div>
+
+                <div class="space-y-1">
+                    <div class="changelog-item bg-purple-900/30 rounded-lg overflow-hidden">
+                        <button class="toggle-button w-full flex items-center justify-between py-3 px-4 hover:bg-purple-900/50 transition-colors" data-target="v022">
+                            <div class="flex items-center gap-2">
+                                <span class="text-lg font-bold text-purple-400">Version 0.2.2</span>
+                                <span class="text-sm text-gray-400">- 09.04.2025</span>
+                            </div>
+                            <i id="icon-v022" class="fas fa-chevron-down text-purple-400"></i>
+                        </button>
+                        <div id="v022" class="changelog-content">
+                            <div class="space-y-4">
+                                <div>
+                                    <h3 class="text-emerald-400 font-medium mb-2">Neue Features</h3>
+                                    <ul class="list-disc list-inside text-gray-300 space-y-1">
+                                        <li>Spielanleitung und Changelog hinzugefügt</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h3 class="text-red-400 font-medium mb-2">Bugfixes</h3>
+                                    <ul class="list-disc list-inside text-gray-300 space-y-1">
+                                        <li>GPU-Synergien werden jetzt korrekt berechnet</li>
+                                        <li>Autosave funktioniert jetzt zuverlässiger</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="changelog-item bg-purple-900/30 rounded-lg overflow-hidden">
+                        <button class="toggle-button w-full flex items-center justify-between py-3 px-4 hover:bg-purple-900/50 transition-colors" data-target="v021">
+                            <div class="flex items-center gap-2">
+                                <span class="text-lg font-bold text-purple-400">Version 0.2.1</span>
+                                <span class="text-sm text-gray-400">- 09.04.2025</span>
+                            </div>
+                            <i id="icon-v021" class="fas fa-chevron-down text-purple-400"></i>
+                        </button>
+                         <div id="v021" class="changelog-content">
+                           <div class="space-y-4">
+                                <div>
+                                    <h3 class="text-emerald-400 font-medium mb-2">Mobile Optimierung</h3>
+                                    <ul class="list-disc list-inside text-gray-300 space-y-1">
+                                        <li>Responsive Design für mobile Geräte verbessert</li>
+                                        <li>Mitarbeiter-Sektion zeigt nun 1 Spalte auf Mobilgeräten, 2 auf Tablets und 4 auf Desktop</li>
+                                        <li>Upgrade-Sektionen zeigen nun 1 Spalte auf Mobilgeräten und 2 auf größeren Bildschirmen</li>
+                                        <li>Scrollbalken in der Mitarbeiter-Sektion entfernt für bessere Übersicht</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h3 class="text-amber-400 font-medium mb-2">Balance-Anpassungen</h3>
+                                    <ul class="list-disc list-inside text-gray-300 space-y-1">
+                                        <li>GPU-Preisskalierung überarbeitet: Individueller Kostenmultiplikator von 22% pro GPU (vorher 15%)</li>
+                                        <li>GPU-Synergie-Upgrade-Kosten erhöht für bessere Spielbalance</li>
+                                        <li>GPU-Tooltip-Text aktualisiert um auf steilere Preisskalierung hinzuweisen</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="changelog-item bg-purple-900/30 rounded-lg overflow-hidden">
+                        <button class="toggle-button w-full flex items-center justify-between py-3 px-4 hover:bg-purple-900/50 transition-colors" data-target="v020">
+                            <div class="flex items-center gap-2">
+                                <span class="text-lg font-bold text-purple-400">Version 0.2.0</span>
+                                <span class="text-sm text-gray-400">- 09.04.2025</span>
+                            </div>
+                            <i id="icon-v020" class="fas fa-chevron-down text-purple-400"></i>
+                        </button>
+                        <div id="v020" class="changelog-content">
+                           <div class="space-y-4">
+                                <div>
+                                    <h3 class="text-emerald-400 font-medium mb-2">Überarbeitung der GPU-Mechanik</h3>
+                                    <ul class="list-disc list-inside text-gray-300 space-y-1">
+                                        <li>GPU-Mechanik komplett überarbeitet: Klickt alle 10 Sekunden und kann verbessert werden, skaliert mit Rängen.</li>
+                                        <li>Klickwert-Berechnung zentralisiert und vereinheitlicht</li>
+                                        <li>GPU-Synergien werden jetzt korrekt in allen Anzeigen berücksichtigt</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h3 class="text-amber-400 font-medium mb-2">Verbesserungen</h3>
+                                    <ul class="list-disc list-inside text-gray-300 space-y-1">
+                                        <li>Große Zahlen werden nun übersichtlich formatiert (z.B. 10k, 1.5M, 2.3Mrd)</li>
+                                        <li>Redundante "Pro Klick" Anzeige aus GPU-Karte entfernt (wird bereits im Wallet angezeigt)</li>
+                                        <li>Bessere Übersichtlichkeit der GPU-Produktionswerte</li>
+                                        <li>Balance-Optimierungen (immer noch viel Testing nötig)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="changelog-item bg-purple-900/30 rounded-lg overflow-hidden">
+                        <button class="toggle-button w-full flex items-center justify-between py-3 px-4 hover:bg-purple-900/50 transition-colors" data-target="v013">
+                            <div class="flex items-center gap-2">
+                                <span class="text-lg font-bold text-purple-400">Version 0.1.3</span>
+                                <span class="text-sm text-gray-400">- 08.04.2025</span>
+                            </div>
+                            <i id="icon-v013" class="fas fa-chevron-down text-purple-400"></i>
+                        </button>
+                        <div id="v013" class="changelog-content">
+                           <div class="space-y-4">
+                                <div>
+                                    <h3 class="text-emerald-400 font-medium mb-2">Neue Features</h3>
+                                    <ul class="list-disc list-inside text-gray-300 space-y-1">
+                                        <li>Gekaufte Upgrades werden nun in einem separaten "Deine Upgrades" Container angezeigt</li>
+                                        <li>Upgrades sind jetzt nach Typ sortiert: Effizienz-Upgrades und Rang-Upgrades</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h3 class="text-amber-400 font-medium mb-2">Verbesserungen</h3>
+                                    <ul class="list-disc list-inside text-gray-300 space-y-1">
+                                        <li>Verbesserte visuelle Darstellung des Shops mit konsistenterem Layout</li>
+                                        <li>Optimierte Farbgebung: Rang-Upgrades in Gold/Amber, Effizienz-Upgrades in Lila</li>
+                                        <li>Bessere Übersichtlichkeit durch klare visuelle Trennung der Upgrade-Typen</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                     <div class="changelog-item bg-purple-900/30 rounded-lg overflow-hidden">
+                        <button class="toggle-button w-full flex items-center justify-between py-3 px-4 hover:bg-purple-900/50 transition-colors" data-target="v012">
+                            <div class="flex items-center gap-2">
+                                <span class="text-lg font-bold text-purple-400">Version 0.1.2</span>
+                                <span class="text-sm text-gray-400">- 08.04.2025</span>
+                            </div>
+                            <i id="icon-v012" class="fas fa-chevron-down text-purple-400"></i>
+                        </button>
+                        <div id="v012" class="changelog-content">
+                           <div class="space-y-4">
+                                <div>
+                                    <h3 class="text-emerald-400 font-medium mb-2">Neue Features</h3>
+                                    <ul class="list-disc list-inside text-gray-300 space-y-1">
+                                        <li>Mining-Center passt sich jetzt dynamisch an die Höhe seines Inhalts an</li>
+                                        <li>Mitarbeiter-Überschriften werden erst angezeigt, wenn mindestens ein Mitarbeiter des jeweiligen Typs gekauft wurde</li>
+                                        <li>Mehr Sprites für Mitarbeiter hinzugefügt</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h3 class="text-emerald-400 font-medium mb-2">Verbesserungen</h3>
+                                    <ul class="list-disc list-inside text-gray-300 space-y-1">
+                                        <li>Konsistentere visuelle Darstellung von nicht leistbaren Items</li>
+                                        <li>Alle nicht leistbaren Items (Mitarbeiter und Upgrades) werden nun einheitlich mit 50% Transparenz und rotem Rahmen dargestellt</li>
+                                        <li>Verbesserte visuelle Hierarchie durch einheitliche Darstellung der "Zu teuer" Badges</li>
+                                        <li>Binärzahlen-Animationen für Rechenzentrumsleiter verbessert und verstärkt</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                     <div class="changelog-item bg-purple-900/30 rounded-lg overflow-hidden">
+                        <button class="toggle-button w-full flex items-center justify-between py-3 px-4 hover:bg-purple-900/50 transition-colors" data-target="v011">
+                            <div class="flex items-center gap-2">
+                                <span class="text-lg font-bold text-purple-400">Version 0.1.1</span>
+                                <span class="text-sm text-gray-400">- 08.04.2024</span>
+                            </div>
+                            <i id="icon-v011" class="fas fa-chevron-down text-purple-400"></i>
+                        </button>
+                        <div id="v011" class="changelog-content">
+                           <div class="space-y-4">
+                                <div>
+                                    <h3 class="text-emerald-400 font-medium mb-2">Neue Features</h3>
+                                    <ul class="list-disc list-inside text-gray-300 space-y-1">
+                                        <li>Neue Idle-Quotes hinzugefügt, die erscheinen, wenn der Spieler inaktiv ist</li>
+                                        <li>Visuelle Unterscheidung zwischen Klick-Quotes (türkis) und Idle-Quotes (rot)</li>
+                                        <li>Leertaste kann jetzt zum Klicken verwendet werden</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h3 class="text-emerald-400 font-medium mb-2">Verbesserungen</h3>
+                                    <ul class="list-disc list-inside text-gray-300 space-y-1">
+                                        <li>Rang-Upgrades deutlich verstärkt für bessere Spielbalance</li>
+                                        <li>Reihenfolge der Upgrades optimiert: Effizienz-Upgrades erscheinen nun vor Rang-Upgrades</li>
+                                        <li>Tooltips verbessert: Verschwinden jetzt automatisch beim Wegbewegen der Maus</li>
+                                        <li>Shop-Updates optimiert für flüssigere Performance und weniger Tooltip-Flackern</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h3 class="text-red-400 font-medium mb-2">Bugfixes</h3>
+                                    <ul class="list-disc list-inside text-gray-300 space-y-1">
+                                        <li>Problem mit dem Ziehen des Ressel-Bildes behoben (Drag & Drop deaktiviert)</li>
+                                        <li>Fehlende Icons für Rang-Upgrades korrigiert</li>
+                                        <li>Tooltip-Verhalten korrigiert: Tooltips verschwinden nun korrekt beim Verlassen eines Elements</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                     <div class="changelog-item bg-purple-900/30 rounded-lg overflow-hidden">
+                        <button class="toggle-button w-full flex items-center justify-between py-3 px-4 hover:bg-purple-900/50 transition-colors" data-target="v010">
+                            <div class="flex items-center gap-2">
+                                <span class="text-lg font-bold text-purple-400">Version 0.1.0</span>
+                                <span class="text-sm text-gray-400">- 08.04.2025</span>
+                            </div>
+                            <i id="icon-v010" class="fas fa-chevron-down text-purple-400"></i>
+                        </button>
+                        <div id="v010" class="changelog-content">
+                           <div class="space-y-4">
+                                <div>
+                                    <h3 class="text-emerald-400 font-medium mb-2">Grundfunktionen implementiert</h3>
+                                    <ul class="list-disc list-inside text-gray-300 space-y-1">
+                                        <li>Grundlegendes Spielsystem mit Klick-Mechanik</li>
+                                        <li>Verschiedene Mitarbeiter-Typen (SG-Admins, Mining-Experten, Rechenzentrumsleiter)</li>
+                                        <li>Upgrade-System mit Rängen und Effizienz-Verbesserungen</li>
+                                        <li>Automatisches Speichersystem</li>
+                                        <li>Sprites der IT-Mitarbeiter erstellt und implementiert</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="changelog-item bg-purple-900/30 rounded-lg overflow-hidden">
+                        <button class="toggle-button w-full flex items-center justify-between py-3 px-4 hover:bg-purple-900/50 transition-colors" data-target="v001">
+                            <div class="flex items-center gap-2">
+                                <span class="text-lg font-bold text-purple-400">Version 0.0.1</span>
+                                <span class="text-sm text-gray-400">- 07.04.2025</span>
+                            </div>
+                            <i id="icon-v001" class="fas fa-chevron-down text-purple-400"></i>
+                        </button>
+                        <div id="v001" class="changelog-content">
+                           <div class="space-y-4">
+                                <div>
+                                    <h3 class="text-emerald-400 font-medium mb-2">Erste Umsetzung der Idee</h3>
+                                    <ul class="list-disc list-inside text-gray-300 space-y-1">
+                                        <li>Schnapsidee eines Cookie Clicker-Klons im Ressel-Stil umgesetzt</li>
+                                        <li>Proof of Concept auf der Ressel-Coin Page verlinkt.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-gray-700">
+                <p class="text-gray-400 text-center">
+                    Viel Erfolg beim Mining! Möge die Macht des Ressels mit dir sein.
+                </p>
+            </div>
+        </div> </div>
+
+    <script>
+        // Diese Funktion wird ausgeführt, sobald das gesamte HTML geladen und geparst ist.
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // Finde alle Buttons, die ein Akkordeon umschalten sollen
+            const accordionToggles = document.querySelectorAll('.toggle-button');
+
+            // Füge jedem Button einen Klick-Listener hinzu
+            accordionToggles.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Hole die ID des Ziel-Inhaltsbereichs aus dem data-target Attribut
+                    const targetId = this.dataset.target;
+                    if (!targetId) {
+                        console.error("Button fehlt data-target Attribut:", this);
+                        return; // Beende, wenn kein Ziel angegeben ist
+                    }
+
+                    const contentElement = document.getElementById(targetId);
+                    const iconElement = document.getElementById('icon-' + targetId); // Finde das Icon über die ID
+
+                    if (!contentElement) {
+                         console.error("Inhaltselement nicht gefunden für ID:", targetId);
+                        return; // Beende, wenn das Inhaltselement nicht existiert
+                    }
+
+                    const currentlyOpen = contentElement.classList.contains('open');
+
+                    // 1. Schließe zuerst ALLE offenen Akkordeon-Inhalte
+                    document.querySelectorAll('.changelog-content.open').forEach(openContent => {
+                        // Nur schließen, wenn es nicht das Element ist, das wir gerade öffnen wollen
+                        // (oder wenn wir das aktuell offene Element schließen wollen)
+                        if (openContent.id !== targetId || currentlyOpen) {
+                             openContent.classList.remove('open');
+                             // Finde das zugehörige Icon und setze die Rotation zurück
+                             const openIconId = 'icon-' + openContent.id;
+                             const openIcon = document.getElementById(openIconId);
+                             if (openIcon) {
+                                 openIcon.classList.remove('rotate-180');
+                             }
+                        }
+                    });
+
+                    // 2. Öffne/Schließe das angeklickte Element
+                    if (!currentlyOpen) {
+                        // Öffnen
+                        contentElement.classList.add('open');
+                        if (iconElement) {
+                            iconElement.classList.add('rotate-180');
+                        }
+                    }
+                    // Wenn es bereits offen war, wurde es in Schritt 1 schon geschlossen.
+                });
+            });
+
+             // Optional: Das erste Element standardmäßig öffnen, falls gewünscht
+             const firstButton = document.querySelector('.toggle-button');
+             if (firstButton) {
+                 // Öffne das erste Element direkt
+                 const targetId = firstButton.dataset.target;
+                 if (targetId) {
+                     const contentElement = document.getElementById(targetId);
+                     const iconElement = document.getElementById('icon-' + targetId);
+                     
+                     if (contentElement) {
+                         contentElement.classList.add('open');
+                         if (iconElement) {
+                             iconElement.classList.add('rotate-180');
+                         }
+                     }
+                 }
+             }
+
+            // Hinzugefügte Funktionalität für den Schließen-Button im iframe-Kontext
+            const closeButton = document.getElementById('close-tutorial');
+            if (closeButton) {
+                closeButton.addEventListener('click', function() {
+                    // Wenn in einem iframe
+                    if (window.self !== window.top) {
+                        // Sendet Nachricht an Eltern-Fenster zum Schließen
+                        window.parent.postMessage('close-tutorial', '*');
+                    } else {
+                        // Wenn als eigenständige Seite geöffnet
+                        window.close();
+                    }
+                });
+            }
+            
+            // Empfange Nachrichten vom Elternfenster
+            window.addEventListener('message', function(event) {
+                if (event.data && event.data.action === 'scrollTo') {
+                    if (event.data.target === 'changelog') {
+                        // Scrolle zum Changelog
+                        const changelog = document.querySelector('h2.text-2xl.font-bold.text-purple-400');
+                        if (changelog) {
+                            changelog.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
