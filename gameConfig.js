@@ -7,7 +7,8 @@ export const staff = [
         name: 'GPU',
         tooltip: {
             title: 'GPU',
-            description: 'Die GPU führt automatisch nach Intervall einen Klick aus. GPUs sind die zentrale Komponente im Mining und haben viele Synergie-Effekte. Da der Markt von Scalpern beherrscht wird, können die Preise rasant steigen.'
+            description: 'GPUs sind die zentrale Komponente im Mining und haben viele Synergie-Effekte. Da der Markt von Scalpern beherrscht wird, können die Preise rasant steigen.',
+            details: 'Führt alle 10 Sekunden automatisch einen Klick aus. Hat starke Synergie-Effekte mit anderen Komponenten.'
         },
         baseCost: 50,
         costMultiplier: 1.22, // Steilerer Preisanstieg pro GPU
@@ -25,7 +26,8 @@ export const staff = [
         name: 'SG-Admin',
         tooltip: {
             title: 'Sachgebiets-Admin',
-            description: 'Die SG-Admins sind die Dulli-Truppe, die jegliche Arbeit zugeschoben bekommt, welche die anderen nicht machen wollen. Also perfekt für das Mining-Team.'
+            description: 'Die SG-Admins sind die Dulli-Truppe, die jegliche Arbeit zugeschoben bekommt, welche die anderen nicht machen wollen. Also perfekt für das Mining-Team.',
+            details: 'Produziert 1 RSL pro Sekunde. Günstig aber effektiv - perfekt für den Einstieg.'
         },
         baseCost: 100,
         count: 0,
@@ -38,7 +40,8 @@ export const staff = [
         name: 'Mining-Experte',
         tooltip: {
             title: 'Mining-Experte',
-            description: 'Diese Typen haben sich in der IT einen Namen gemacht und verfügen über bessere Hardware als die anderen. Vielleicht bringts ja was.'
+            description: 'Diese Typen haben sich in der IT einen Namen gemacht und verfügen über bessere Hardware als die anderen. Vielleicht bringts ja was.',
+            details: 'Produziert 8 RSL pro Sekunde. Ein erfahrener Mitarbeiter mit deutlich höherer Effizienz.'
         },
         baseCost: 1100,
         count: 0,
@@ -52,7 +55,8 @@ export const staff = [
         name: 'Rechenzentrumsleiter',
         tooltip: {
             title: 'Rechenzentrumsleiter',
-            description: 'Tpyisches Middle-Management. Labern viel, machen eigentlich nichts, aber irgendwie kommt trotzdem RSL bei rum.'
+            description: 'Tpyisches Middle-Management. Labern viel, machen eigentlich nichts, aber irgendwie kommt trotzdem RSL bei rum.',
+            details: 'Produziert 85 RSL pro Sekunde. Der effizienteste Mitarbeiter für die Massenproduktion.'
         },
         baseCost: 12000,
         count: 0,
@@ -75,6 +79,7 @@ export const upgrades = [
         tooltip: {
             title: 'GPU-Klick-Synergie I',
             description: 'Jede GPU erhöht deinen Klick-Wert um 1%.',
+            details: 'Jede vorhandene GPU erhöht deinen Klick-Wert permanent um 1%.',
             requirement: 'Benötigt: 5 GPUs'
         },
         cost: 2500,
@@ -96,6 +101,7 @@ export const upgrades = [
         tooltip: {
             title: 'GPU-Klick-Synergie II',
             description: 'Jede GPU erhöht deinen Klick-Wert um zusätzliche 2%.',
+            details: 'Jede vorhandene GPU erhöht deinen Klick-Wert permanent um weitere 2%.',
             requirement: 'Benötigt: 15 GPUs und GPU-Klick-Synergie I'
         },
         cost: 12500,
@@ -118,6 +124,7 @@ export const upgrades = [
         tooltip: {
             title: 'GPU-Klick-Synergie III',
             description: 'Jede GPU erhöht deinen Klick-Wert um zusätzliche 3%.',
+            details: 'Jede vorhandene GPU erhöht deinen Klick-Wert permanent um weitere 3%.',
             requirement: 'Benötigt: 30 GPUs und GPU-Klick-Synergie II'
         },
         cost: 50000,
@@ -140,6 +147,7 @@ export const upgrades = [
         tooltip: {
             title: 'GPU-Produktions-Synergie I',
             description: 'Jede GPU erhöht die Produktion aller Mitarbeiter um 0.5%.',
+            details: 'Jede vorhandene GPU erhöht die Produktion aller Mitarbeiter permanent um 0.5%.',
             requirement: 'Benötigt: 10 GPUs'
         },
         cost: 5000,
@@ -161,6 +169,7 @@ export const upgrades = [
         tooltip: {
             title: 'GPU-Produktions-Synergie II',
             description: 'Jede GPU erhöht die Produktion aller Mitarbeiter um zusätzliche 1%.',
+            details: 'Jede vorhandene GPU erhöht die Produktion aller Mitarbeiter permanent um weitere 1%.',
             requirement: 'Benötigt: 20 GPUs und GPU-Produktions-Synergie I'
         },
         cost: 25000,
@@ -183,6 +192,7 @@ export const upgrades = [
         tooltip: {
             title: 'GPU-Produktions-Synergie III',
             description: 'Jede GPU erhöht die Produktion aller Mitarbeiter um zusätzliche 1.5%.',
+            details: 'Jede vorhandene GPU erhöht die Produktion aller Mitarbeiter permanent um weitere 1.5%.',
             requirement: 'Benötigt: 35 GPUs und GPU-Produktions-Synergie II'
         },
         cost: 100000,
@@ -205,6 +215,7 @@ export const upgrades = [
         tooltip: {
             title: 'Praktikanten-Power',
             description: 'Unbezahlt, aber du darfst für den großen Wolfgang schuften. Verdoppelt die RSL pro Klick.',
+            details: 'Multipliziert die Menge an RSL, die du pro Klick erhältst, mit 2.',
             requirement: 'Keine Voraussetzungen'
         },
         cost: 50,
@@ -221,6 +232,7 @@ export const upgrades = [
         tooltip: {
             title: 'Werkstudenten-Power',
             description: 'Du bist fast sowas wie ein Mensch. Verfünffacht die RSL pro Klick.',
+            details: 'Multipliziert die Menge an RSL, die du pro Klick erhältst, mit 5.',
             requirement: 'Benötigt: Praktikant'
         },
         cost: 500,
@@ -238,6 +250,7 @@ export const upgrades = [
         tooltip: {
             title: 'Azubi-Power',
             description: 'Ein engagierter Azubi revolutioniert deine Klick-Methoden. Multipliziert die RSL pro Klick mit 15.',
+            details: 'Multipliziert die Menge an RSL, die du pro Klick erhältst, mit 15.',
             requirement: 'Benötigt: Werkstudent'
         },
         cost: 2500,
@@ -255,6 +268,7 @@ export const upgrades = [
         tooltip: {
             title: 'Ausgelernte Power',
             description: 'Ein frisch ausgelernter Mitarbeiter bringt neue Perspektiven ein. Multipliziert die RSL pro Klick mit 50.',
+            details: 'Multipliziert die Menge an RSL, die du pro Klick erhältst, mit 50.',
             requirement: 'Benötigt: Azubi'
         },
         cost: 10000,
@@ -272,6 +286,7 @@ export const upgrades = [
         tooltip: {
             title: 'Schulteam-Power',
             description: 'Das Schulteam optimiert alle Prozesse durch professionelle Weiterbildung. Multipliziert die RSL pro Klick mit 150.',
+            details: 'Multipliziert die Menge an RSL, die du pro Klick erhältst, mit 150.',
             requirement: 'Benötigt: Ausgelernt'
         },
         cost: 50000,
@@ -289,6 +304,7 @@ export const upgrades = [
         tooltip: {
             title: 'Client-Team Power',
             description: 'Das Client-Team revolutioniert die Arbeitsplatzumgebung. Multipliziert die RSL pro Klick mit 500.',
+            details: 'Multipliziert die Menge an RSL, die du pro Klick erhältst, mit 500.',
             requirement: 'Benötigt: Schulteam'
         },
         cost: 250000,
@@ -306,6 +322,7 @@ export const upgrades = [
         tooltip: {
             title: 'Fachverfahren-Power',
             description: 'Die Fachverfahren automatisieren komplexe Arbeitsprozesse. Multipliziert die RSL pro Klick mit 2.000.',
+            details: 'Multipliziert die Menge an RSL, die du pro Klick erhältst, mit 2.000.',
             requirement: 'Benötigt: Client-Team'
         },
         cost: 250000,
@@ -437,14 +454,14 @@ export const upgrades = [
             details: 'Klick-Intervall: 10 Sek → 8 Sek',
             requirement: 'Benötigt: 10 GPUs'
         },
-        cost: 100,
+        cost: 1500,
         requiredBuilding: 'gpu',
         requiredCount: 10,
         special: {
             type: 'interval',
             value: 8000
         },
-        icon: 'bolt',
+        icon: 'microchip',
         purchased: false,
         unlocked: false,
         tier: 1
@@ -459,7 +476,7 @@ export const upgrades = [
             details: 'Klick-Intervall: 8 Sek → 6 Sek',
             requirement: 'Benötigt: 25 GPUs und RTX GPUs'
         },
-        cost: 500,
+        cost: 10000,
         requiredBuilding: 'gpu',
         requiredCount: 25,
         requires: 'gpu_efficiency1',
@@ -480,14 +497,15 @@ export const upgrades = [
         category: 'mitarbeiter',
         tooltip: {
             title: 'Kaffeemaschinen-Upgrade',
-            description: 'Wolfgang spendiert einen schicken Vollautomat.',
-            details: 'Verdoppelt die Effizienz aller SG-Admins durch erhöhte Koffeinzufuhr.',
-            requirement: 'Benötigt: 10 Admins'
+            description: 'Wolfgang spendiert einen schicken Vollautomat für deine SG-Admins.',
+            details: 'Erhöht die Effizienz aller SG-Admins um 50% durch erhöhte Koffeinzufuhr.',
+            requirement: 'Benötigt: 3 Admins',
+            display: '+50% Effizienz aller Admins'
         },
         cost: 500,
         requiredBuilding: 'sgadmin',
-        requiredCount: 10,
-        multiplier: 2,
+        requiredCount: 3,
+        multiplier: 1.5,
         icon: 'mug-hot',
         purchased: false,
         unlocked: false,
@@ -500,13 +518,15 @@ export const upgrades = [
         tooltip: {
             title: 'Celos anheuern',
             description: 'Die Saubande von Celos übernimmt den First-Level, dadurch ist mehr Zeit fürs schürfen!',
-            details: 'Verdoppelt erneut die Effizienz aller Admins durch bessere Eingabegeräte.',
-            requirement: 'Benötigt: 25 Admins'
+            details: 'Erhöht erneut die Effizienz aller Admins um 75%.',
+            requirement: 'Benötigt: 25 Admins und Kaffeevollautomat',
+            display: '+75% Effizienz aller Admins'
         },
-        cost: 2000,
+        cost: 5000,
+        requires: 'sgadmin_efficiency1',
         requiredBuilding: 'sgadmin',
         requiredCount: 25,
-        multiplier: 2,
+        multiplier: 1.75,
         icon: 'keyboard',
         purchased: false,
         unlocked: false,
@@ -516,42 +536,85 @@ export const upgrades = [
     // === Mining Expert Upgrades ===
     {
         id: 'miningexpert_efficiency1',
-        name: 'Flüssigkühlung',
+        name: 'Überwachungssystem',
         category: 'mitarbeiter',
         tooltip: {
-            title: 'Flüssigkühlung',
-            description: 'Installiere hochwertige Flüssigkühlung in deinen Mining Rigs.',
-            details: 'Verdoppelt die Effizienz aller Mining Rigs durch bessere Temperaturkontrolle.',
-            requirement: 'Benötigt: 10 Mining Rigs'
+            title: 'Überwachungssystem',
+            description: 'Ein neues Monitoring-System hilft den Experten, ihre Ressourcen besser zu verwalten.',
+            details: 'Erhöht die Effizienz aller Mining-Experten um 50% durch optimierte Ressourcennutzung.',
+            requirement: 'Benötigt: 3 Mining-Experten',
+            display: '+50% Effizienz aller Experten'
         },
-        cost: 5500,
+        cost: 2500,
         requiredBuilding: 'miningexpert',
-        requiredCount: 10,
-        multiplier: 2,
-        icon: 'temperature-low',
+        requiredCount: 3,
+        multiplier: 1.5,
+        icon: 'gauge',
         purchased: false,
         unlocked: false,
         tier: 1
+    },
+    {
+        id: 'miningexpert_efficiency2',
+        name: 'Neue Virtualisierung',
+        category: 'mitarbeiter',
+        tooltip: {
+            title: 'Neue Virtualisierung',
+            description: 'C. Baur hat endlich die neuen Server bekommen, jetzt gibts Kerne ohne Ende!',
+            details: 'Verdoppelt die Effizienz aller Mining Rigs durch bessere Temperaturkontrolle.',
+            requirement: 'Benötigt: 10 Mining-Experten und Überwachungssystem',
+            display: '+75% Effizienz aller Experten'
+        },
+        cost: 15000,
+        requires: 'miningexpert_efficiency1',
+        requiredBuilding: 'miningexpert',
+        requiredCount: 10,
+        multiplier: 1.75,
+        icon: 'server',
+        purchased: false,
+        unlocked: false,
+        tier: 2
     },
 
     // === Data Center Upgrades ===
     {
         id: 'datacenterleader_efficiency1',
-        name: 'Grüne Energie',
+        name: 'Fortbildung',
         category: 'mitarbeiter',
         tooltip: {
-            title: 'Grüne Energie',
-            description: 'Stelle deine Rechenzentren auf erneuerbare Energien um.',
-            details: 'Verdoppelt die Effizienz aller Rechenzentren durch nachhaltige Energieversorgung.',
-            requirement: 'Benötigt: 10 Rechenzentren'
+            title: 'Fortbildung',
+            description: 'Die Chefs nehmen an einer superwichtigen Fortbildung teil und werden dadurch noch cheffiger.',
+            details: 'Verdoppelt die Effizienz aller Rechenzentrumsleiter durch krasse Führungskompetenz (zwinker).',
+            requirement: 'Benötigt: 3 RZ-Leiter',
+            display: '+100% Effizienz aller RZ-Leiter'
         },
-        cost: 60000,
+        cost: 50000,
         requiredBuilding: 'datacenterleader',
-        requiredCount: 10,
+        requiredCount: 5,
         multiplier: 2,
-        icon: 'leaf',
+        icon: 'chalkboard-user',
         purchased: false,
         unlocked: false,
         tier: 1
+    },
+    {
+        id: 'datacenterleader_efficiency2',
+        name: 'Freie Hand',
+        category: 'mitarbeiter',
+        tooltip: {
+            title: 'Freie Hand',
+            description: 'Die kommunale IT wird in eine eigenständige GmbH ausgegliedert.',
+            details: 'Verdreifacht die Effizienz aller Rechenzentrumsleiter durch mehr Entscheidungsfreiheit.',
+            requirement: 'Benötigt: 10 RZ-Leiter',
+            display: '+300% Effizienz aller RZ-Leiter'
+        },
+        cost: 200000,
+        requiredBuilding: 'datacenterleader',
+        requiredCount: 20,
+        multiplier: 3,
+        icon: 'building',
+        purchased: false,
+        unlocked: false,
+        tier: 2
     }
 ]; 

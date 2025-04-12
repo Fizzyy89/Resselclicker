@@ -697,11 +697,35 @@ function renderBuildings() {
                 <div>
                     <div class="tooltip-title">${building.tooltip.title}</div>
                     <div class="tooltip-description">${building.tooltip.description}</div>
-                    <div class="tooltip-stats">
-                        Aktueller Besitz: ${building.count}<br>
-                        Klick-Intervall: ${interval} Sekunden<br>
-                        Klick-Stärke: ${formatNumber(clickValue)} RSL<br>
-                        Nächste kostet: ${formatNumber(cost)} RSL
+                    ${building.tooltip.details ? `
+                        <div class="tooltip-details mt-2 text-teal-400/80 text-sm">
+                            <i class="fas fa-info-circle mr-1 opacity-50"></i>
+                            ${building.tooltip.details}
+                        </div>
+                    ` : ''}
+                    <div class="tooltip-stats mt-2">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-400">Aktueller Besitz:</span>
+                            <span class="text-emerald-400 font-medium">${building.count}</span>
+                        </div>
+                        ${building.id === 'gpu' ? `
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-gray-400">Klick-Intervall:</span>
+                                <span class="text-emerald-400 font-medium">${getCurrentGPUInterval() / 1000} Sekunden</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-gray-400">Klick-Stärke:</span>
+                                <span class="text-emerald-400 font-medium">${formatNumber(getCurrentClickValue())} RSL</span>
+                            </div>
+                        ` : `
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-gray-400">Produktion:</span>
+                                <span class="text-emerald-400 font-medium">${formatNumber(calculateBuildingProduction(building))} RSL/sec</span>
+                            </div>
+                        `}
+                        <div class="mt-2 text-purple-400">
+                            Nächste kostet: ${formatNumber(cost)} RSL
+                        </div>
                     </div>
                 </div>
             `;
@@ -711,10 +735,35 @@ function renderBuildings() {
                 <div>
                     <div class="tooltip-title">${building.tooltip.title}</div>
                     <div class="tooltip-description">${building.tooltip.description}</div>
-                    <div class="tooltip-stats">
-                        Aktueller Besitz: ${building.count}<br>
-                        Produktion: ${formatNumber(production)} RSL/sec<br>
-                        Nächste kostet: ${formatNumber(cost)} RSL
+                    ${building.tooltip.details ? `
+                        <div class="tooltip-details mt-2 text-teal-400/80 text-sm">
+                            <i class="fas fa-info-circle mr-1 opacity-50"></i>
+                            ${building.tooltip.details}
+                        </div>
+                    ` : ''}
+                    <div class="tooltip-stats mt-2">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-400">Aktueller Besitz:</span>
+                            <span class="text-emerald-400 font-medium">${building.count}</span>
+                        </div>
+                        ${building.id === 'gpu' ? `
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-gray-400">Klick-Intervall:</span>
+                                <span class="text-emerald-400 font-medium">${getCurrentGPUInterval() / 1000} Sekunden</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-gray-400">Klick-Stärke:</span>
+                                <span class="text-emerald-400 font-medium">${formatNumber(getCurrentClickValue())} RSL</span>
+                            </div>
+                        ` : `
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-gray-400">Produktion:</span>
+                                <span class="text-emerald-400 font-medium">${formatNumber(production)} RSL/sec</span>
+                            </div>
+                        `}
+                        <div class="mt-2 text-purple-400">
+                            Nächste kostet: ${formatNumber(cost)} RSL
+                        </div>
                     </div>
                 </div>
             `;
@@ -745,6 +794,12 @@ function renderBuildings() {
             <div>
                 <div class="tooltip-title">${upgrade.tooltip.title}</div>
                 <div class="tooltip-description">${upgrade.tooltip.description}</div>
+                ${upgrade.tooltip.details ? `
+                    <div class="tooltip-details mt-2 text-teal-400/80 text-sm">
+                        <i class="fas fa-info-circle mr-1 opacity-50"></i>
+                        ${upgrade.tooltip.details}
+                    </div>
+                ` : ''}
                 <div class="tooltip-stats">
                     ${upgrade.tooltip.requirement}<br>
                     <div class="mt-2 text-purple-400">
@@ -845,18 +900,22 @@ function buyUpgrade(upgradeId) {
 function checkUpgradeUnlocks() {
     upgrades.forEach(upgrade => {
         if (!upgrade.purchased) {
-            if (upgrade.type === 'click') {
-                // Für Click-Upgrades prüfen, ob das vorherige Upgrade gekauft wurde
-                if (upgrade.requires) {
-                    const requiredUpgrade = upgrades.find(u => u.id === upgrade.requires);
-                    upgrade.unlocked = requiredUpgrade && requiredUpgrade.purchased;
-                } else {
-                    upgrade.unlocked = true; // Erstes Click-Upgrade ist immer verfügbar
+            // Prüfe zuerst, ob ein vorheriges Upgrade benötigt wird
+            if (upgrade.requires) {
+                const requiredUpgrade = upgrades.find(u => u.id === upgrade.requires);
+                if (!requiredUpgrade || !requiredUpgrade.purchased) {
+                    upgrade.unlocked = false;
+                    return;
                 }
-            } else {
-                // Für Building-Upgrades wie bisher
+            }
+
+            // Dann prüfe die Building-Anforderungen, falls vorhanden
+            if (upgrade.requiredBuilding) {
                 const building = buildings.find(b => b.id === upgrade.requiredBuilding);
                 upgrade.unlocked = building && building.count >= upgrade.requiredCount;
+            } else {
+                // Wenn kein Building benötigt wird (z.B. erstes Click-Upgrade)
+                upgrade.unlocked = true;
             }
         }
     });
@@ -1595,10 +1654,7 @@ function createUpgradeElement(upgrade) {
     } else if (upgrade.special && upgrade.special.type === 'interval') {
         productionInfo = upgrade.tooltip.details;
     } else if (mitarbeiter) {
-        const currentProduction = mitarbeiter.baseProduction * mitarbeiter.productionMultiplier * mitarbeiter.count;
-        const newProduction = mitarbeiter.baseProduction * (mitarbeiter.productionMultiplier * upgrade.multiplier) * mitarbeiter.count;
-        const productionIncrease = newProduction - currentProduction;
-        productionInfo = `+${formatNumber(productionIncrease)} RSL/s`;
+        productionInfo = upgrade.tooltip.display;
     }
     
     return `
