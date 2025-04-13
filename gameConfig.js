@@ -585,7 +585,7 @@ export const upgrades = [
             title: 'Fortbildung',
             description: 'Die Chefs nehmen an einer superwichtigen Fortbildung teil und werden dadurch noch cheffiger.',
             details: 'Verdoppelt die Effizienz aller Rechenzentrumsleiter durch krasse Führungskompetenz (zwinker).',
-            requirement: 'Benötigt: 3 RZ-Leiter',
+            requirement: 'Benötigt: 5 RZ-Leiter',
             display: '+100% Effizienz aller RZ-Leiter'
         },
         cost: 50000,
@@ -605,7 +605,7 @@ export const upgrades = [
             title: 'Freie Hand',
             description: 'Die kommunale IT wird in eine eigenständige GmbH ausgegliedert.',
             details: 'Verdreifacht die Effizienz aller Rechenzentrumsleiter durch mehr Entscheidungsfreiheit.',
-            requirement: 'Benötigt: 10 RZ-Leiter',
+            requirement: 'Benötigt: 20 RZ-Leiter',
             display: '+300% Effizienz aller RZ-Leiter'
         },
         cost: 200000,
