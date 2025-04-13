@@ -1,6 +1,6 @@
 # 🎮 Ressel-Clicker
 
-[![Letzte Version](https://img.shields.io/badge/Version-0.3.0-blueviolet)](tutorial.html#changelog) 
+[![Letzte Version](https://img.shields.io/badge/Version-0.3.1-blueviolet)](tutorial.html#changelog) 
 
 Ein humorvoller Clicker-Klon im Stil von Cookie Clicker, bei dem du Ressel-Coins (RSL) schürfen musst, bis die Maustasten glühen! Stelle Mitarbeiter ein, kaufe Upgrades und optimiere deine Mining-Strategie, um die RSL-Produktion zu maximieren.
 

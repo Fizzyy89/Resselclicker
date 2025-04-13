@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ressel-Profil</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .crypto-card {
+            background: rgba(17, 25, 40, 0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.125);
+            transition: all 0.3s ease;
+        }
+
+        .crypto-card:hover {
+            box-shadow: 0 0 25px rgba(32, 213, 136, 0.1);
+        }
+
+        body {
+            background: transparent;
+        }
+
+        .stats-value {
+            text-shadow: 0 0 10px rgba(32, 213, 136, 0.5);
+        }
+
+        .profile-pic {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center 20%;
+            border: 3px solid rgba(45, 212, 191, 0.5);
+            box-shadow: 0 0 15px rgba(45, 212, 191, 0.3);
+            transition: all 0.3s ease;
+            transform: scaleX(-1);
+            transform-origin: center;
+        }
+
+        .profile-pic:hover {
+            border-color: rgba(45, 212, 191, 0.8);
+            box-shadow: 0 0 20px rgba(45, 212, 191, 0.5);
+            /* Separate transforms to prevent rotation */
+            transform: scaleX(-1);
+            scale: 1.05;
+        }
+
+        .profile-pic-selector {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 300px;
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 100;
+            margin-top: 1rem;
+        }
+
+        .profile-pic-option {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center 20%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            transform: scaleX(-1);
+            transform-origin: center;
+        }
+
+        .profile-pic-option:hover {
+            /* Separate transforms to prevent rotation */
+            transform: scaleX(-1);
+            scale: 1.1;
+            border: 2px solid rgba(45, 212, 191, 0.8);
+            box-shadow: 0 0 10px rgba(45, 212, 191, 0.3);
+        }
+
+        /* Scrollbar Styling */
+        .profile-pic-selector::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .profile-pic-selector::-webkit-scrollbar-track {
+            background: rgba(17, 25, 40, 0.75);
+            border-radius: 10px;
+        }
+
+        .profile-pic-selector::-webkit-scrollbar-thumb {
+            background: rgba(45, 212, 191, 0.5);
+            border-radius: 10px;
+        }
+
+        .profile-pic-selector::-webkit-scrollbar-thumb:hover {
+            background: rgba(45, 212, 191, 0.8);
+        }
+    </style>
+</head>
+<body class="text-gray-200 p-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8">
+            <div class="flex items-center gap-6">
+                <!-- Profile Picture Section -->
+                <div class="relative group">
+                    <img id="selected-profile-pic" src="images/ressel.png" alt="Profilbild" class="profile-pic cursor-pointer">
+                    <div class="absolute bottom-0 right-0 bg-emerald-400 text-white rounded-full w-8 h-8 flex items-center justify-center cursor-pointer hover:bg-emerald-500 transition-colors">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    
+                    <!-- Profile Picture Selector -->
+                    <div class="profile-pic-selector crypto-card p-4">
+                        <h4 class="text-emerald-400 font-bold mb-3">Wähle dein Profilbild</h4>
+                        <div class="grid grid-cols-4 gap-3" id="profile-pic-options">
+                            <!-- Profile pictures will be added here dynamically -->
+                        </div>
+                    </div>
+                </div>
+                
+                <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-400">
+                    Dein Mining-Profil
+                </h1>
+            </div>
+            <button id="close-profile" class="text-gray-400 hover:text-white transition-colors">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Klick-Statistiken -->
+            <div class="crypto-card p-6">
+                <div class="flex items-center gap-2 mb-4">
+                    <i class="fas fa-hand-pointer text-xl text-emerald-400"></i>
+                    <h3 class="text-xl font-bold text-emerald-400">Klick-Statistiken</h3>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-400">Manuelle Klicks:</span>
+                        <span id="total-manual-clicks" class="stats-value text-emerald-400 font-bold">0</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-400">GPU-Klicks:</span>
+                        <span id="total-gpu-clicks" class="stats-value text-emerald-400 font-bold">0</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-400">Gesamt-Klickwert:</span>
+                        <span id="total-click-value" class="stats-value text-emerald-400 font-bold">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RSL-Statistiken -->
+            <div class="crypto-card p-6">
+                <div class="flex items-center gap-2 mb-4">
+                    <i class="fas fa-coins text-xl text-amber-400"></i>
+                    <h3 class="text-xl font-bold text-amber-400">RSL-Statistiken</h3>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-400">Gesamt verdient:</span>
+                        <span id="total-rsl-earned" class="stats-value text-amber-400 font-bold">0</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-400">Gesamt ausgegeben:</span>
+                        <span id="total-rsl-spent" class="stats-value text-amber-400 font-bold">0</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-400">Peak RSL/Sekunde:</span>
+                        <span id="peak-rsl-per-second" class="stats-value text-amber-400 font-bold">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mitarbeiter-Statistiken -->
+            <div class="crypto-card p-6">
+                <div class="flex items-center gap-2 mb-4">
+                    <i class="fas fa-users text-xl text-purple-400"></i>
+                    <h3 class="text-xl font-bold text-purple-400">Mitarbeiter-Statistiken</h3>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-400">Gesamt eingestellt:</span>
+                        <span id="total-staff-hired" class="stats-value text-purple-400 font-bold">0</span>
+                    </div>
+                    <div class="mt-4">
+                        <h4 class="text-sm text-gray-400 mb-2">Aufschlüsselung:</h4>
+                        <div class="space-y-2 pl-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-400">GPUs:</span>
+                                <span id="staff-gpu" class="stats-value text-purple-400 font-bold">0</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-400">SG-Admins:</span>
+                                <span id="staff-sgadmin" class="stats-value text-purple-400 font-bold">0</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-400">Mining-Experten:</span>
+                                <span id="staff-miningexpert" class="stats-value text-purple-400 font-bold">0</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-400">RZ-Leiter:</span>
+                                <span id="staff-datacenterleader" class="stats-value text-purple-400 font-bold">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upgrade-Statistiken -->
+            <div class="crypto-card p-6">
+                <div class="flex items-center gap-2 mb-4">
+                    <i class="fas fa-arrow-up text-xl text-teal-400"></i>
+                    <h3 class="text-xl font-bold text-teal-400">Upgrade-Statistiken</h3>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-400">Gesamt gekauft:</span>
+                        <span id="total-upgrades-purchased" class="stats-value text-teal-400 font-bold">0</span>
+                    </div>
+                    <div class="mt-4">
+                        <h4 class="text-sm text-gray-400 mb-2">Aufschlüsselung:</h4>
+                        <div class="space-y-2 pl-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-400">Rang-Upgrades:</span>
+                                <span id="upgrades-click" class="stats-value text-teal-400 font-bold">0</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-400">GPU-Upgrades:</span>
+                                <span id="upgrades-gpu" class="stats-value text-teal-400 font-bold">0</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-400">Mitarbeiter-Upgrades:</span>
+                                <span id="upgrades-mitarbeiter" class="stats-value text-teal-400 font-bold">0</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-400">Synergie-Upgrades:</span>
+                                <span id="upgrades-synergy" class="stats-value text-teal-400 font-bold">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Spielzeit -->
+        <div class="mt-6 crypto-card p-6">
+            <div class="flex items-center gap-2 mb-4">
+                <i class="fas fa-clock text-xl text-blue-400"></i>
+                <h3 class="text-xl font-bold text-blue-400">Spielzeit & Start</h3>
+            </div>
+            <div class="space-y-4">
+                <div class="text-center">
+                    <span id="total-play-time" class="stats-value text-4xl font-bold text-blue-400">0s</span>
+                </div>
+                <div class="text-center text-sm text-gray-300">
+                    Deine Arbeit begann am <span id="mining-start-date" class="text-blue-400 font-medium"></span> um <span id="mining-start-time" class="text-blue-400 font-medium"></span> Uhr.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Available profile pictures
+        const DEFAULT_PROFILE_PIC = 'defaultprofile.png';
+        const profilePics = [
+            DEFAULT_PROFILE_PIC,  // Default-Bild an erster Stelle
+            'sgadmin.png', 'sgadmin2.png', 'sgadmin3.png', 'sgadmin4.png',
+            'sgadmin5.png', 'sgadmin6.png', 'sgadmin7.png', 'sgadmin8.png',
+            'sgadmin9.png', 'sgadmin10.png', 'sgadmin11.png', 'sgadmin12.png',
+            'sgadmin13.png',
+            'miner.png', 'miner2.png', 'miner3.png',
+            'rzleiter.png', 'rzleiter2.png', 'rzleiter3.png'
+        ];
+
+        // Load saved profile picture
+        const savedProfilePic = localStorage.getItem('selectedProfilePic');
+        if (savedProfilePic) {
+            document.getElementById('selected-profile-pic').src = `images/${savedProfilePic}`;
+        } else {
+            document.getElementById('selected-profile-pic').src = `images/${DEFAULT_PROFILE_PIC}`;
+        }
+
+        // Populate profile picture options
+        const optionsContainer = document.getElementById('profile-pic-options');
+        profilePics.forEach(pic => {
+            const option = document.createElement('img');
+            option.src = `images/${pic}`;
+            option.alt = pic;
+            option.className = 'profile-pic-option';
+            option.addEventListener('click', () => {
+                document.getElementById('selected-profile-pic').src = `images/${pic}`;
+                localStorage.setItem('selectedProfilePic', pic);
+                document.querySelector('.profile-pic-selector').style.display = 'none';
+            });
+            optionsContainer.appendChild(option);
+        });
+
+        // Toggle profile picture selector
+        const profilePicSelector = document.querySelector('.profile-pic-selector');
+        document.getElementById('selected-profile-pic').addEventListener('click', (e) => {
+            e.stopPropagation(); // Verhindert, dass das Event zum document bubbled
+            profilePicSelector.style.display = profilePicSelector.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Close selector when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!profilePicSelector.contains(e.target) && e.target !== document.getElementById('selected-profile-pic')) {
+                profilePicSelector.style.display = 'none';
+            }
+        });
+
+        // Event Listener für den Schließen-Button
+        document.getElementById('close-profile').addEventListener('click', () => {
+            window.parent.postMessage('close-profile', '*');
+        });
+
+        // Funktion zum Aktualisieren der Statistiken
+        function updateStats(stats) {
+            // Klick-Statistiken
+            document.getElementById('total-manual-clicks').textContent = stats.totalManualClicks;
+            document.getElementById('total-gpu-clicks').textContent = stats.totalGPUClicks;
+            document.getElementById('total-click-value').textContent = stats.totalClickValue;
+
+            // RSL-Statistiken
+            document.getElementById('total-rsl-earned').textContent = stats.totalRSLEarned;
+            document.getElementById('total-rsl-spent').textContent = stats.totalRSLSpent;
+            document.getElementById('peak-rsl-per-second').textContent = stats.peakRSLPerSecond;
+
+            // Mitarbeiter-Statistiken
+            document.getElementById('total-staff-hired').textContent = stats.totalStaffHired;
+            document.getElementById('staff-gpu').textContent = stats.staffBreakdown.gpu;
+            document.getElementById('staff-sgadmin').textContent = stats.staffBreakdown.sgadmin;
+            document.getElementById('staff-miningexpert').textContent = stats.staffBreakdown.miningexpert;
+            document.getElementById('staff-datacenterleader').textContent = stats.staffBreakdown.datacenterleader;
+
+            // Upgrade-Statistiken
+            document.getElementById('total-upgrades-purchased').textContent = stats.totalUpgradesPurchased;
+            document.getElementById('upgrades-click').textContent = stats.upgradeBreakdown.click;
+            document.getElementById('upgrades-gpu').textContent = stats.upgradeBreakdown.gpu;
+            document.getElementById('upgrades-mitarbeiter').textContent = stats.upgradeBreakdown.mitarbeiter;
+            document.getElementById('upgrades-synergy').textContent = stats.upgradeBreakdown.synergy;
+
+            // Spielzeit
+            document.getElementById('total-play-time').textContent = stats.totalPlayTime;
+        }
+
+        // Event Listener für Statistik-Updates vom Hauptspiel
+        window.addEventListener('message', (event) => {
+            if (event.data.type === 'update-stats') {
+                updateStats(event.data.stats);
+                
+                // Aktualisiere Mining-Start Info
+                if (event.data.createdAt) {
+                    const date = new Date(event.data.createdAt.date);
+                    document.getElementById('mining-start-date').textContent = date.toLocaleDateString('de-DE', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric'
+                    });
+                    document.getElementById('mining-start-time').textContent = date.toLocaleTimeString('de-DE', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html> 

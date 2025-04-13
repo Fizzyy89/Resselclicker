@@ -1,5 +1,9 @@
 // Import game configurations
 import { staff as buildings, upgrades } from './gameConfig.js';  // Import staff as buildings for backwards compatibility
+import { StatisticsManager } from './statistics.js';
+
+// Initialize statistics manager
+const statsManager = new StatisticsManager();
 
 // Lade die Zitate
 let clickQuotes = [];
@@ -169,6 +173,9 @@ function handleClick(event) {
     createRippleEffect(event);
     animateResselClick();
     
+    // Track manual click in statistics
+    statsManager.onManualClick(clickValue);
+    
     // 5% Chance auf einen Spruch
     if (Math.random() < 0.05 && clickQuotes.length > 0) {
         // Übergebe true für Click-Quote
@@ -245,7 +252,10 @@ function gameLoop(timestamp) {
     // Medium updates (production calculations)
     if (!lastProductionUpdate || timestamp - lastProductionUpdate >= UPDATE_INTERVALS.MEDIUM) {
         if (coinsPerSecond > 0) {
-            coinCount += coinsPerSecond;
+            const production = coinsPerSecond;
+            coinCount += production;
+            statsManager.onPassiveEarnings(production);
+            statsManager.updatePeakRSLPerSecond(coinsPerSecond);
         }
         lastProductionUpdate = timestamp;
     }
@@ -429,6 +439,11 @@ function updateGPUs(timestamp) {
         
         coinCount += totalClicks;
         updateCoinCount();
+        
+        // Track GPU clicks in statistics - count each GPU as a separate click
+        for (let i = 0; i < gpuBuilding.count; i++) {
+            statsManager.onGPUClick(clickValueWithSynergies);
+        }
         
         // Create a special floating text for GPU clicks
         const textElement = document.createElement('span');
@@ -654,7 +669,7 @@ function renderBuildings() {
                             </div>
                             <p class="text-gray-400 text-sm text-left">${upgrade.tooltip.description}</p>
                             ${!isPurchased && !isLocked ? `
-                                <div class="text-xs text-amber-400 bg-amber-400/5 px-2 py-1 rounded-lg mt-1">
+                                <div class="text-xs text-emerald-400 bg-emerald-400/5 px-2 py-1 rounded-lg mt-1">
                                     <i class="fas fa-chart-line mr-1 opacity-50"></i>
                                     +${formatNumber(upgrade.multiplier - coinsPerClick)} RSL pro Klick
                                 </div>
@@ -833,15 +848,19 @@ function buyBuilding(buildingId) {
     if (building && coinCount >= cost) {
         coinCount -= cost;
         building.count++;
+        
+        // Track building purchase in statistics
+        statsManager.onRSLSpent(cost);
+        statsManager.onStaffHired(buildingId);
 
         // Aktualisiere spezielle Building-Typen
         if (building.id === 'gpu') {
             createGPU();
         } else if (building.id === 'sgadmin') {
             updateSGAdmins();
-        } else if (building.id === 'miningexpert') {  // Changed from 'miningrig'
+        } else if (building.id === 'miningexpert') {
             updateMiningExperts();
-        } else if (building.id === 'datacenterleader') {  // Changed from 'datacenter'
+        } else if (building.id === 'datacenterleader') {
             updateDatacenterLeaders();
         }
 
@@ -859,6 +878,10 @@ function buyUpgrade(upgradeId) {
     if (upgrade && !upgrade.purchased && coinCount >= upgrade.cost) {
         coinCount -= upgrade.cost;
         upgrade.purchased = true;
+
+        // Track upgrade purchase in statistics
+        statsManager.onRSLSpent(upgrade.cost);
+        statsManager.onUpgradePurchased(upgrade.type || upgrade.category || 'other');
 
         if (upgrade.type === 'click') {
             coinsPerClick = upgrade.multiplier;
@@ -1328,7 +1351,7 @@ function saveGame() {
         gpuCount,
         lastSave: Date.now(),
         createdAt: localStorage.getItem(SAVE_KEY) ? JSON.parse(localStorage.getItem(SAVE_KEY)).createdAt : Date.now(),
-        staff: buildings.map(b => ({  // Changed from 'buildings' to 'staff'
+        staff: buildings.map(b => ({
             id: b.id,
             count: b.count,
             productionMultiplier: b.productionMultiplier
@@ -1337,7 +1360,8 @@ function saveGame() {
             id: u.id,
             purchased: u.purchased,
             unlocked: u.unlocked
-        }))
+        })),
+        statistics: statsManager.toJSON()
     };
     
     localStorage.setItem(SAVE_KEY, JSON.stringify(saveData));
@@ -1348,7 +1372,7 @@ function getCurrentRank() {
     return clickUpgrades.length === 0 ? "armer Hurakrüppel" : clickUpgrades[clickUpgrades.length - 1].name;
 }
 
-// In der updateStatsText Funktion, ändere die Farbe des Rang-Bereichs
+// In der updateStatsText Funktion
 function updateStatsText() {
     const statsTextElement = document.getElementById('stats-text');
     if (!statsTextElement) return;
@@ -1374,27 +1398,53 @@ function updateStatsText() {
 
     statsTextElement.innerHTML = `
         <div class="grid grid-cols-2 gap-3">
-            <div class="crypto-card p-4">
-                <div class="flex items-center gap-2 mb-2">
-                    <i class="fas fa-clock text-emerald-400"></i>
-                    <h3 class="font-bold text-emerald-400">Mining-Start</h3>
+            <div class="crypto-card p-4 cursor-pointer hover:scale-102 transition-all duration-200 group" onclick="openProfile()">
+                <div class="flex items-center gap-3">
+                    <div class="relative">
+                        <img id="profile-preview-pic" src="images/defaultprofile.png" alt="Profilbild" 
+                             class="w-12 h-12 rounded-full object-cover object-center-top border-2 border-emerald-400/50 group-hover:border-emerald-400 transition-colors"
+                             style="transform: scaleX(-1); object-position: center 20%;">
+                        <div class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-emerald-400/50 group-hover:bg-emerald-400 transition-colors flex items-center justify-center">
+                            <i class="fas fa-chart-line text-xs text-white"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-emerald-400">Dein Mining-Profil</h3>
+                        <p class="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">Klicke für Statistiken</p>
+                    </div>
                 </div>
-                <p class="text-sm text-gray-300 leading-relaxed">
-                    Deine Arbeit begann am <span class="text-emerald-400 font-medium">${dateStr}</span> um <span class="text-emerald-400 font-medium">${timeStr}</span> Uhr.
-                </p>
             </div>
             <div class="crypto-card p-4">
-                <div class="flex items-center gap-2 mb-2">
+                <div class="flex items-center gap-2">
                     <i class="fas fa-crown text-amber-400"></i>
                     <h3 class="font-bold text-amber-400">Aktueller Rang</h3>
                 </div>
-                <p class="text-sm text-gray-300 leading-relaxed">
+                <p class="text-sm text-gray-300 leading-relaxed mt-1">
                     Du bist derzeit <span class="text-amber-400 font-semibold">${currentRank}</span>.
                 </p>
             </div>
         </div>
     `;
+
+    // Update profile preview after setting the HTML
+    updateProfilePreview();
 }
+
+// Funktion zum Aktualisieren des Profilbild-Previews
+function updateProfilePreview() {
+    const savedProfilePic = localStorage.getItem('selectedProfilePic') || 'defaultprofile.png';
+    const previewPic = document.getElementById('profile-preview-pic');
+    if (previewPic) {
+        previewPic.src = `images/${savedProfilePic}`;
+    }
+}
+
+// Aktualisiere den Preview nach dem Schließen des Profil-Modals
+window.addEventListener('message', (event) => {
+    if (event.data === 'close-profile') {
+        updateProfilePreview();
+    }
+});
 
 function loadGame() {
     const savedData = localStorage.getItem(SAVE_KEY);
@@ -1477,6 +1527,11 @@ function loadGame() {
         updateTotalProduction();
         updateStatsText();
         
+        // Load statistics
+        if (save.statistics) {
+            statsManager.fromJSON(save.statistics);
+        }
+        
         return true;
     } catch (error) {
         console.error('Fehler beim Laden des Spielstands:', error);
@@ -1551,6 +1606,9 @@ function resetGame() {
         // Lösche den Spielstand aus dem LocalStorage
         localStorage.removeItem(SAVE_KEY);
         
+        // Lösche das ausgewählte Profilbild
+        localStorage.removeItem('selectedProfilePic');
+        
         // Setze alle Spielvariablen zurück
         coinCount = 0;
         coinsPerClick = 1;
@@ -1567,6 +1625,9 @@ function resetGame() {
             upgrade.purchased = false;
             upgrade.unlocked = false;
         });
+
+        // Setze die Statistiken zurück
+        statsManager.reset();
         
         // Aktualisiere die Anzeige
         updateCoinCount();
@@ -1579,6 +1640,9 @@ function resetGame() {
         
         // Zeige Bestätigung
         alert('Spielstand wurde erfolgreich zurückgesetzt!');
+        
+        // Lade die Seite neu, um alle Änderungen sofort sichtbar zu machen
+        location.reload();
     }
 }
 
@@ -2164,3 +2228,66 @@ function formatNumber(num) {
     }
     return num.toLocaleString();
 }
+
+// Funktion zum Öffnen des Profils
+function openProfile() {
+    // Erstelle das Modal-Overlay
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-4';
+    modal.style.backgroundColor = 'rgba(0, 0, 0, 0.75)';
+    modal.style.backdropFilter = 'blur(5px)';
+
+    // Einfachere Implementierung: Nutze einen iframe
+    modal.innerHTML = `
+        <div class="relative w-full max-w-4xl max-h-[90vh] overflow-hidden bg-transparent rounded-xl">
+            <iframe src="profile.html" class="w-full h-[90vh] border-0" id="profile-iframe"></iframe>
+        </div>
+    `;
+
+    // Füge das Modal zum Body hinzu
+    document.body.appendChild(modal);
+
+    // Verhindere Scrollen des Hintergrunds
+    document.body.style.overflow = 'hidden';
+
+    // Event Listener zum Schließen
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.remove();
+            document.body.style.overflow = '';
+        }
+    });
+
+    // Event Listener für Nachrichten aus dem iframe
+    window.addEventListener('message', function(event) {
+        if (event.data === 'close-profile') {
+            modal.remove();
+            document.body.style.overflow = '';
+        }
+    });
+
+    // Sende aktuelle Statistiken an das Profil
+    const iframe = document.getElementById('profile-iframe');
+    iframe.addEventListener('load', () => {
+        iframe.contentWindow.postMessage({
+            type: 'update-stats',
+            stats: statsManager.getFormattedStats(),
+            createdAt: {
+                date: new Date(JSON.parse(localStorage.getItem(SAVE_KEY) || '{}').createdAt || Date.now())
+            }
+        }, '*');
+    });
+}
+
+// Add profile button event listener
+document.addEventListener('DOMContentLoaded', () => {
+    // ... existing DOMContentLoaded code ...
+    
+    const profileButton = document.getElementById('profile-button');
+    if (profileButton) {
+        profileButton.addEventListener('click', openProfile);
+    }
+});
+
+// Mache openProfile global verfügbar
+window.openProfile = openProfile;
