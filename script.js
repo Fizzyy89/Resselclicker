@@ -1997,7 +1997,7 @@ function updateDatacenterLeaders() {
     leadersGrid.innerHTML = '';
     
     // Array mit verfügbaren Leiter-Sprites
-    const leaderSprites = ['images/rzleiter.png', 'images/rzleiter2.png', 'images/rzleiter3.png', 'images/rzleiter4.png'];
+    const leaderSprites = ['images/rzleiter.png', 'images/rzleiter2.png', 'images/rzleiter3.png', 'images/rzleiter_s1.png', 'images/rzleiter_s2.png', 'images/rzleiter_s3.png'];
     
     // Berechne den Abstand zwischen Leitern basierend auf der Anzahl
     const containerWidth = leadersGrid.offsetWidth;

@@ -21,6 +21,7 @@ export class StatisticsManager {
             totalPlayTime: 0,            // Gesamte Spielzeit in Sekunden
             sessionStartTime: Date.now(), // Start der aktuellen Session
             lastSaveTime: Date.now(),    // Zeitpunkt des letzten Saves
+            lastSessionTime: 0,          // Gespeicherte Zeit aus vorherigen Sessions
             
             // Mitarbeiter-bezogene Statistiken
             totalStaffHired: 0,          // Gesamt eingestellte Mitarbeiter
@@ -102,7 +103,7 @@ export class StatisticsManager {
     updatePlayTime() {
         const now = Date.now();
         const sessionTime = Math.floor((now - this.stats.sessionStartTime) / 1000);
-        this.stats.totalPlayTime = sessionTime;
+        this.stats.totalPlayTime = this.stats.lastSessionTime + sessionTime;
     }
 
     // === Speichern & Laden ===
@@ -110,6 +111,8 @@ export class StatisticsManager {
     // Speichere die Statistiken in ein Objekt
     toJSON() {
         this.updatePlayTime();
+        // Speichere die aktuelle Gesamtzeit als lastSessionTime für die nächste Session
+        this.stats.lastSessionTime = this.stats.totalPlayTime;
         return {
             ...this.stats,
             lastSaveTime: Date.now()
@@ -122,6 +125,9 @@ export class StatisticsManager {
         
         // Übernehme alle gespeicherten Statistiken
         Object.assign(this.stats, savedStats);
+        
+        // Speichere die geladene Gesamtzeit
+        this.stats.lastSessionTime = this.stats.totalPlayTime || 0;
         
         // Aktualisiere session-spezifische Werte
         this.stats.sessionStartTime = Date.now();
